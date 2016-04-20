@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Analysis with R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Data Analysis with R">
+  <meta name="author" content="Mykola Pavlov">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Data Analysis with R</h1>
+    <h2>Probability</h2>
+    <p>Mykola Pavlov<br/>Data Scientist at Azzurro.io</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Course Logistic</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Every Wednesday 19:00 - 21:00</li>
+<li>Slides: <a href="http://nikolaypavlov.github.io/da-workshops-3/">http://nikolaypavlov.github.io/da-workshops-3/</a></li>
+<li>Skype Chat: <a href="https://join.skype.com/gjN0CfAd4bhg">https://join.skype.com/gjN0CfAd4bhg</a></li>
+<li>Reference Book: <a href="https://www.openintro.org/stat/textbook.php">https://www.openintro.org/stat/textbook.php</a></li>
+<li><a href="http://setosa.io/ev/conditional-probability/">Conditional Probability</a></li>
+<li>Install the following packages: openintro</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Topics</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Classical probability</li>
+<li>Properties</li>
+<li>Probability distribution (Special topic)</li>
+<li>Conditional probability</li>
+<li>Independent events</li>
+<li>Law of total probability</li>
+<li>Bayes&#39;s theorem</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Classical probability</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s say we have a set of events \(\{w_1, \dotsc, w_n\}\)</p>
+
+<p><img src="assets/img/dice.png" alt="Dice"></p>
+
+<ol>
+<li>Set of events is collectively exhaustive</li>
+<li>All events are mutualy exclusive</li>
+<li>All events are equialy possible</li>
+</ol>
+
+<p>Probability of elementary event: \(P(w_i) = \frac{1}{n}\)</p>
+
+<p>Probability of event: \(P(A) = \frac{k}{n}\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Classical probability properties</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Sample space \(\Omega = \{w_1, \dotsc, w_n\}\)</p>
+
+<ul>
+<li>\(P(\Omega) = 1\) </li>
+<li>\(P(A) = 0 <=> A = \emptyset\)</li>
+<li>\(P(A \sqcup B) = P(A) + P(B)\) - disjoint outcomes</li>
+<li>\(P(A \cup B) = P(A) + P(B) - P(A \cap B)\) - general addition rule</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Exercise. Part 1</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">addmargins(table(email$spam, email$number, dnn=c(&quot;Spam&quot;, &quot;Number&quot;)))
+</code></pre>
+
+<pre><code>##      Number
+## Spam  none small  big  Sum
+##   0    400  2659  495 3554
+##   1    149   168   50  367
+##   Sum  549  2827  545 3921
+</code></pre>
+
+<p>Of the 3,921 emails, 549 had no numbers, 2,827 had only one or more small numbers, and 545 had at least one big number.</p>
+
+<ol>
+<li>Are the outcomes none, small, and big disjoint?</li>
+<li>Determine the proportion of emails with value small and big separately.</li>
+<li>Compute the probability a randomly selected email from the data set has a number in it, small or big.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Exercise. Part 2</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">addmargins(table(email$spam, email$number, dnn=c(&quot;Spam&quot;, &quot;Number&quot;)))
+</code></pre>
+
+<pre><code>##      Number
+## Spam  none small  big  Sum
+##   0    400  2659  495 3554
+##   1    149   168   50  367
+##   Sum  549  2827  545 3921
+</code></pre>
+
+<p>In the email data set with 3,921 emails, 367 were spam, 2,827 contained some small numbers but no big numbers, and 168 had both characteristics.</p>
+
+<ol>
+<li>Determine the probability a randomly drawn email from the email data set is spam and had small numbers (but not big numbers).</li>
+<li>What is the probability that the email had either of these attributes?</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Classical probability properties</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p>\(P(A_1 \cup \dotsc \cup A_k) = P(A_1) + \dotsc + P(A_k) - P(A_1 \cap A_2) - P(A_1 \cap A_3) - \dotsc - \\ - P(A_{k-1} \cap A_k) + \dotsc + (-1)^{k-1} P(A_1 \cap \dotsc \cap A_k)\)</p></li>
+<li><p>\(P(A_1 \cup \dotsc \cup A_k) \leq P(A_1) + \dotsc + P(A_k)\)</p></li>
+<li><p>\(\bar{A} := \Omega \backslash A, P(\bar{A}) = 1 - P(A)\)</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Probability distribution (special topic)</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">hist(email$num_char, seq(0, 195.0, by=5), probability=T, xlab=&quot;Number of characters (in thousands)&quot;, 
+     ylab=&quot;Probability&quot;, main=&quot;Probability Distribution&quot;)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+
+<ol>
+<li>The outcomes listed must be disjoint.</li>
+<li>Each probability must be between 0 and 1. </li>
+<li>The probabilities must total 1.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Conditional probability</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s say we roll a die once. Event A is 1. Event B is even outcome. </p>
+
+<p><img src="assets/img/dice.png" alt="Dice"></p>
+
+<ol>
+<li>Find \(P(A|B)\)</li>
+<li>Find \(P(A|B)\), if A is 2.</li>
+</ol>
+
+<p>In general \(\Omega = \{w_1, \dotsc, w_n\}, B = \{w_1, \dotsc, w_k\}, k \geq 1\), </p>
+
+<p>then \(P(A|B) = \frac{|A \cap B|}{|B|} = \frac{|A \cap B| \frac{1}{\Omega}}{|B| \frac{1}{\Omega}} = \frac{P(A \cap B)}{P(B)}\), \(P(B) \ne 0\)</p>
+
+<p>\(P(A|B) P(B) = P(A \cap B)\) - general multiplication rule</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/img/cond_prob.png" alt="Teen-Parents"></p>
+
+<ul>
+<li>If at least one parent of a teenager completed a college degree, what is the chance the teenager attended college right after high school?</li>
+</ul>
+
+<p>\(P(A|B) = \frac{|A \cap B|}{|B|} = 231/280 = 0.825\) </p>
+
+<ul>
+<li>A teenager is randomly selected from the sample and she did not attend college right after high school. What is the probability that at least one of her parents has a college degree?</li>
+</ul>
+
+<p>\(P(A|B) = \frac{|A \cap B|}{|B|} = 49/347 = 0.141\) </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Independent events</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s say we have some events \(A, B\) in the sample space \(\Omega\). \(A\) independent of \(B\), if </p>
+
+<p>\(P(A|B) = P(A)\), \(B \ne \emptyset\), same for \(P(B|A) = P(B)\), \(A \ne \emptyset\)</p>
+
+<p>\(P(A|B) P(B) = P(A) P(B) \Leftrightarrow P(A \cap B) = P(A) P(B)\)</p>
+
+<p>\(P(A \cap B)\) - joint probability
+\(P(A), P(B)\) - marginal probability</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>About 9% of people are left-handed. Suppose 2 people are selected at random from the population. Because the sample size of 2 is very small relative to the population, it is reasonable to assume these two people are independent.</p>
+
+<ul>
+<li>What is the probability that both are left-handed?</li>
+<li>What is the probability that both are right-handed?</li>
+</ul>
+
+<p>\(P(A \cap B) = P(A) P(B) = 0.09 * 0.09 = 0.0081\)
+\(P(\bar{A} \cap \bar{B}) = (1 - P(A)) * (1 - P(B)) = 0.91 * 0.91  = 0.8281\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Exercise. Part 1.</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let X and Y represent the outcomes of rolling two dice.</p>
+
+<p><img src="assets/img/dice2.png" alt="Dice"></p>
+
+<ol>
+<li>What is the probability that the first die, X, is 1?</li>
+<li>What is the probability that both X and Y are 1?</li>
+<li>Use the formula for conditional probability to compute P (Y = 1 | X = 1)</li>
+<li>What is P (Y = 1)? Is this different from the answer from part 3?</li>
+</ol>
+
+<p>Hint: think about the relationships between X and Y</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Smallpox in Boston 1721</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/img/smallpox.png" alt="Smallpox"></p>
+
+<ul>
+<li>Find the probability that a randomly selected person who was not inoculated died from smallpox.</li>
+<li>Determine the probability that an inoculated person died from smallpox.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Law of total probability</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s say we have some event \(A\) in the sample space \(\Omega\), and mutualy exclusive \(B_1, \dotsc, B_k\), so that \(B_1 \sqcup \dotsc \sqcup B_k = \Omega\) </p>
+
+<p>\(P(A) = P(A \cap B_1) + \dotsc + P(A \cap B_k) = P(A|B_1) P(B_1) + \dotsc + P(A|B_k) P(B_k)\) </p>
+
+<p>\(P(A) = \sum_{i=1}^{k}P(A|B_i) P(B_i)\) </p>
+
+<h3>Example</h3>
+
+<p>Suppose that two factories supply light bulbs to the market. Factory X&#39;s bulbs work for over 5000 hours in 99% of cases, whereas factory Y&#39;s bulbs work for over 5000 hours in 95% of cases. It is known that factory X supplies 60% of the total bulbs available. What is the chance that a purchased bulb will work for longer than 5000 hours?</p>
+
+<p>\(P(A) = P(A|B_X) P(B_X) + P(A|B_Y) P(B_Y) = 0.99 * 0.6 + 0.95 * 0.4 = 0.974\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Bayes&#39; theorem</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We know that \(P(A) = \sum_{i=1}^{k}P(A|B_i) P(B_i)\), but if we want to know \(P(B_i|A)\)? </p>
+
+<p>\(P(A \cap B_i) = P(A|B_i) P(B_i) = P(B_i \cap A) = P(B_i|A) P(A)\)</p>
+
+<p>\(P(B_i|A) = \frac{P(A|B_i) P(B_i)}{P(A)} = \frac{P(A|B_i) P(B_i)}{\sum_{i=1}^{k}P(A|B_i) P(B_i)}\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Sasha is a system administrator of popular movie file server. Sometimes, when new movie comes out, his server uplink is overloaded. 35% of new movies are commedies, 20% sci-fi, and 45% are horrors. When new commedie comes out, the server uplink fills up about 25% of times, it fills up 70% of times with a release of the new sci-fi, and 5% of time in case of new horror movie. </p>
+
+<p>If Sasha comes to work and finds the uplink is overloaded, what is the probability that new sci-fi movie is on the server?</p>
+
+<p>\(A\) - full uplink event, \(B_1, B_2, B_3\) - new commedie, sci-fi, horror events, \(P(B_2|A)\) - ?</p>
+
+<p>\(P(B_1) = 0.35, P(B_2) = 0.2, P(B_3) = 0.45\)</p>
+
+<p>\(P(A|B_1) = 0.25, P(A|B_2) = 0.7, P(A|B_3) = 0.05\)</p>
+
+<p>\(P(B_2|A) = \frac{P(A|B_2) P(B_2)}{P(A|B_1) P(B_1) + P(A|B_2) P(B_2) + P(A|B_3) P(B_3)}\)</p>
+
+<p>\(P(B_2|A) = \frac{0.7 * 0.2}{0.25 * 0.35 + 0.7 * 0.2 + 0.05 * 0.45} = 0.56\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Homework</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><a href="http://htmlpreview.github.io/?https://github.com/andrewpbray/oiLabs-base-R/blob/master/probability/probability.html">Lab 2 - Probability</a></li>
+<li>Skype Chat for discussions: <a href="https://join.skype.com/gjN0CfAd4bhg">https://join.skype.com/gjN0CfAd4bhg</a></li>
+<li>Reading: OpenIntro Statistics Chapter 2, till p. 2.3</li>
+<li>Reference Book: <a href="https://www.openintro.org/stat/textbook.php">https://www.openintro.org/stat/textbook.php</a></li>
+<li><a href="http://setosa.io/ev/conditional-probability/">Conditional Probability</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Course Logistic'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Topics'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Classical probability'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Classical probability properties'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Exercise. Part 1'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='Exercise. Part 2'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Classical probability properties'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Probability distribution (special topic)'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Conditional probability'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Example'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Independent events'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Example'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Exercise. Part 1.'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Smallpox in Boston 1721'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Law of total probability'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Bayes&#39; theorem'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Example'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Homework'>
+         18
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
