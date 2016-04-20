@@ -169,6 +169,7 @@ $P(A|B) = P(A)$, $B \ne \emptyset$, same for $P(B|A) = P(B)$, $A \ne \emptyset$
 $P(A|B) P(B) = P(A) P(B) \Leftrightarrow P(A \cap B) = P(A) P(B)$
 
 $P(A \cap B)$ - joint probability
+
 $P(A), P(B)$ - marginal probability
 
 ---
